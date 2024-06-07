@@ -1,7 +1,7 @@
 package com.ldms.benjones.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.ldms.benjones.View;
+import com.ldms.benjones.utils.View;
 import jakarta.persistence.*;
 
 @Entity

@@ -1,4 +1,4 @@
-package com.ldms.benjones;
+package com.ldms.benjones.utils;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.ldms.benjones.entity.ScheduleEntry;

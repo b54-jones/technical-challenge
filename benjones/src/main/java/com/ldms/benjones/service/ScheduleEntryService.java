@@ -1,6 +1,6 @@
 package com.ldms.benjones.service;
 
-import com.ldms.benjones.ScheduleInfo;
+import com.ldms.benjones.utils.ScheduleInfo;
 import com.ldms.benjones.entity.Schedule;
 import com.ldms.benjones.entity.ScheduleEntry;
 import com.ldms.benjones.repository.ScheduleEntryRepository;
@@ -48,8 +48,7 @@ public class ScheduleEntryService {
                 remainingBalance = getRemainingBalance(schedule.getId(), i-1);
             }
             if (i == schedule.getNumberOfRepayments()) {
-                // Last payment so balloon payment is due
-                repaymentAmount = remainingBalance + schedule.getBalloonPayment();
+                repaymentAmount = remainingBalance;
                 monthlyInterest = 0;
             }
             ScheduleEntry entry = calculateScheduleEntry(monthlyInterest, remainingBalance, repaymentAmount, schedule.getId(), i);

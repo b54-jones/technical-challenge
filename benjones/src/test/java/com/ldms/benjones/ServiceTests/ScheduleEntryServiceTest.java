@@ -1,12 +1,11 @@
 package com.ldms.benjones.ServiceTests;
 
-import com.ldms.benjones.ScheduleInfo;
+import com.ldms.benjones.utils.ScheduleInfo;
 import com.ldms.benjones.entity.Schedule;
 import com.ldms.benjones.entity.ScheduleEntry;
+import com.ldms.benjones.repository.ScheduleEntryRepository;
 import com.ldms.benjones.service.ScheduleEntryService;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
@@ -24,6 +24,9 @@ public class ScheduleEntryServiceTest {
 
     @Autowired
     private ScheduleEntryService scheduleEntryService;
+
+    @Mock
+    private ScheduleEntryRepository scheduleEntryRepository;
 
     @Test
     public void calculateMonthlyRepaymentTest() {
@@ -48,12 +51,11 @@ public class ScheduleEntryServiceTest {
     @Test
     public void getScheduleInfoTest() {
         Schedule schedule = new Schedule(1L, 25000, 0.075, 5000, 0, 12);
-        ScheduleEntryService scheduleEntryServiceSpy = spy(scheduleEntryService);
 
-        List<ScheduleEntry> entries = scheduleEntryServiceSpy.generateEntries(schedule);
-        doReturn(entries).when(scheduleEntryServiceSpy).getScheduleEntriesForSchedule(1L);
+        List<ScheduleEntry> entries = scheduleEntryService.generateEntries(schedule);
+        Mockito.when(scheduleEntryRepository.findByScheduleId(1L)).thenReturn(Optional.ofNullable(entries));
 
-        ScheduleInfo actualInfo = scheduleEntryServiceSpy.getScheduleInfo(schedule);
+        ScheduleInfo actualInfo = scheduleEntryService.getScheduleInfo(schedule);
         double expectedMonthlyPayment = 1735.1483377081208;
         double expectedTotalInterest = 811.002733629987;
         double expectedTotalPayments = 25811.00273362999;

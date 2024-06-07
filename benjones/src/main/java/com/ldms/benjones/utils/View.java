@@ -1,4 +1,4 @@
-package com.ldms.benjones;
+package com.ldms.benjones.utils;
 
 public class View {
     public static class Summary{}

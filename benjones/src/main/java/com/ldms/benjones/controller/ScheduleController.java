@@ -1,8 +1,8 @@
 package com.ldms.benjones.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.ldms.benjones.ScheduleInfo;
-import com.ldms.benjones.View;
+import com.ldms.benjones.utils.ScheduleInfo;
+import com.ldms.benjones.utils.View;
 import com.ldms.benjones.entity.Schedule;
 import com.ldms.benjones.entity.ScheduleEntry;
 import com.ldms.benjones.service.ScheduleEntryService;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
