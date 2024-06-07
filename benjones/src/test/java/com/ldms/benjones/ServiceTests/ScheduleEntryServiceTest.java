@@ -1,13 +1,23 @@
 package com.ldms.benjones.ServiceTests;
 
+import com.ldms.benjones.ScheduleInfo;
 import com.ldms.benjones.entity.Schedule;
 import com.ldms.benjones.entity.ScheduleEntry;
 import com.ldms.benjones.service.ScheduleEntryService;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 @SpringBootTest
 public class ScheduleEntryServiceTest {
@@ -18,9 +28,11 @@ public class ScheduleEntryServiceTest {
     @Test
     public void calculateMonthlyRepaymentTest() {
         Schedule schedule = new Schedule(1L, 25000, 0.075, 5000, 0, 60);
-        double repayment = scheduleEntryService.calculateMonthlyRepayment(schedule);
 
-        assertEquals(repayment, 400.7589719124706);
+        double actualRepayment = scheduleEntryService.calculateMonthlyRepayment(schedule);
+        double expectedRepayment = 400.7589719124706;
+
+        assertEquals(actualRepayment, expectedRepayment);
     }
 
     @Test
@@ -30,6 +42,24 @@ public class ScheduleEntryServiceTest {
 
         assertEquals(actualEntry.getInterestPayment(), expectedEntry.getInterestPayment());
         assertEquals(actualEntry.getPrincipalPayment(), expectedEntry.getPrincipalPayment());
-        assertEquals(actualEntry.getRemainingBalance(), actualEntry.getRemainingBalance());
+        assertEquals(actualEntry.getRemainingBalance(), expectedEntry.getRemainingBalance());
+    }
+
+    @Test
+    public void getScheduleInfoTest() {
+        Schedule schedule = new Schedule(1L, 25000, 0.075, 5000, 0, 12);
+        ScheduleEntryService scheduleEntryServiceSpy = spy(scheduleEntryService);
+
+        List<ScheduleEntry> entries = scheduleEntryServiceSpy.generateEntries(schedule);
+        doReturn(entries).when(scheduleEntryServiceSpy).getScheduleEntriesForSchedule(1L);
+
+        ScheduleInfo actualInfo = scheduleEntryServiceSpy.getScheduleInfo(schedule);
+        double expectedMonthlyPayment = 1735.1483377081208;
+        double expectedTotalInterest = 811.002733629987;
+        double expectedTotalPayments = 25811.00273362999;
+
+        Assertions.assertEquals(actualInfo.getMonthlyRepaymentAmount(), expectedMonthlyPayment);
+        Assertions.assertEquals(actualInfo.getTotalInterest(), expectedTotalInterest);
+        Assertions.assertEquals(actualInfo.getTotalPayments(), expectedTotalPayments);
     }
 }
