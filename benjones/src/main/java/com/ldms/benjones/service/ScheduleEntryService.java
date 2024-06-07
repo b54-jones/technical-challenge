@@ -48,8 +48,7 @@ public class ScheduleEntryService {
                 remainingBalance = getRemainingBalance(schedule.getId(), i-1);
             }
             if (i == schedule.getNumberOfRepayments()) {
-                // Last payment so balloon payment is due
-                repaymentAmount = remainingBalance + schedule.getBalloonPayment();
+                repaymentAmount = remainingBalance;
                 monthlyInterest = 0;
             }
             ScheduleEntry entry = calculateScheduleEntry(monthlyInterest, remainingBalance, repaymentAmount, schedule.getId(), i);
