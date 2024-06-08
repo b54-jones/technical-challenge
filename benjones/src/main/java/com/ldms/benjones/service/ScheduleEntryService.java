@@ -21,14 +21,8 @@ public class ScheduleEntryService {
         this.scheduleEntryRepository = scheduleEntryRepository;
     }
 
-    public ScheduleEntry saveScheduleEntry(ScheduleEntry scheduleEntry) {
-        return scheduleEntryRepository.save(scheduleEntry);
-    }
-
-    public double getRemainingBalance(Long scheduleId, int paymentNumber) {
-        ScheduleEntry entry = scheduleEntryRepository.findByScheduleIdAndPaymentNumber(scheduleId, paymentNumber)
-                .orElseThrow(() -> new EntityNotFoundException("ScheduleEntry not found"));
-        return entry.getRemainingBalance();
+    public List<ScheduleEntry> saveScheduleEntries(List<ScheduleEntry> scheduleEntries) {
+        return scheduleEntryRepository.saveAll(scheduleEntries);
     }
 
     public List<ScheduleEntry> getScheduleEntriesForSchedule(Long scheduleId) {
@@ -42,10 +36,10 @@ public class ScheduleEntryService {
         double remainingBalance;
         for (int i = 1; i <= schedule.getNumberOfRepayments(); i++) {
             if (i == 1) {
-                // It's the first payment
+                // It's the first payment so total balance
                 remainingBalance = (schedule.getAmountBorrowed() - schedule.getDeposit());
             } else {
-                remainingBalance = getRemainingBalance(schedule.getId(), i-1);
+                remainingBalance = entries.get(i-2).getRemainingBalance();
             }
             if (i == schedule.getNumberOfRepayments()) {
                 repaymentAmount = remainingBalance;
@@ -53,7 +47,6 @@ public class ScheduleEntryService {
             }
             ScheduleEntry entry = calculateScheduleEntry(monthlyInterest, remainingBalance, repaymentAmount, schedule.getId(), i);
             entries.add(entry);
-            this.saveScheduleEntry(entry);
         }
         return entries;
     }

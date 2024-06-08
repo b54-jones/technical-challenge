@@ -30,17 +30,18 @@ public class ScheduleController {
     public ResponseEntity<Schedule> saveSchedule(@RequestBody Schedule schedule) {
         Schedule savedSchedule = scheduleService.saveSchedule(schedule);
         List<ScheduleEntry> scheduleEntries = scheduleEntryService.generateEntries(schedule);
+        scheduleEntryService.saveScheduleEntries(scheduleEntries);
         return ResponseEntity.ok(savedSchedule);
     }
 
-    @GetMapping("/schedule-info")
+    @GetMapping("/schedules")
     @JsonView(View.Summary.class)
     public List<ScheduleInfo> getAllSchedules() {
         List<Schedule> schedules = scheduleService.getAllSchedules();
         return scheduleEntryService.getScheduleInfoList(schedules);
     }
 
-    @GetMapping("/schedule-info/{id}")
+    @GetMapping("/schedules/{id}")
     @JsonView(View.Detail.class)
     private ScheduleInfo getScheduleInfo(@PathVariable Long id) {
         Schedule schedule = scheduleService.findSchedule(id);

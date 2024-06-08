@@ -7,6 +7,7 @@ import com.ldms.benjones.repository.ScheduleEntryRepository;
 import com.ldms.benjones.service.ScheduleEntryService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.spy;
 @SpringBootTest
 public class ScheduleEntryServiceTest {
 
-    @Autowired
+    @InjectMocks
     private ScheduleEntryService scheduleEntryService;
 
     @Mock
@@ -36,6 +37,13 @@ public class ScheduleEntryServiceTest {
         double expectedRepayment = 400.7589719124706;
 
         assertEquals(actualRepayment, expectedRepayment);
+    }
+
+    @Test
+    public void generateScheduleEntriesTest() {
+        Schedule schedule = new Schedule(1L, 25000, 0.075, 5000, 0, 60);
+        List<ScheduleEntry> scheduleEntries = scheduleEntryService.generateEntries(schedule);
+        assertEquals(scheduleEntries.size(), schedule.getNumberOfRepayments());
     }
 
     @Test
