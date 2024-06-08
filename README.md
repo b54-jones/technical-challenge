@@ -22,7 +22,7 @@ OR
 This will save your schedule to the database, generate an amortisation schedule for it and save that too.
 
 - GET API
-URL: http://localhost:8080/api/v1/schedule-info
+URL: http://localhost:8080/api/v1/schedules
 Returns a list of the previously created schedules with the following details:
     - Details used to generate it
     - Monthly repayment amount
@@ -30,6 +30,6 @@ Returns a list of the previously created schedules with the following details:
     - Total payments due
 
 - GET API
-URL: http://localhost:8080/api/v1/schedule-info/{id}
+URL: http://localhost:8080/api/v1/schedules/{id}
 Where ID is the ID of the schedule you want information on.
 Returns the details from the previous API for this specific schedule, as well as the amortisation schedule generated for it
