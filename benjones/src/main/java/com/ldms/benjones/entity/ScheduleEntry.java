@@ -20,12 +20,12 @@ public class ScheduleEntry {
         this.id = id;
     }
 
-    public Long getScheduleID() {
-        return scheduleId;
+    public Long getInitiationId() {
+        return initiationId;
     }
 
-    public void setScheduleID(Long scheduleID) {
-        this.scheduleId = scheduleID;
+    public void setInitiationId(Long initiationId) {
+        this.initiationId = initiationId;
     }
 
     public int getPaymentNumber() {
@@ -68,8 +68,8 @@ public class ScheduleEntry {
         this.remainingBalance = remainingBalance;
     }
 
-    public ScheduleEntry(Long scheduleId, int paymentNumber, double monthlyPayment, double principalPayment, double interestPayment, double remainingBalance) {
-        this.scheduleId = scheduleId;
+    public ScheduleEntry(Long initiationId, int paymentNumber, double monthlyPayment, double principalPayment, double interestPayment, double remainingBalance) {
+        this.initiationId = initiationId;
         this.paymentNumber = paymentNumber;
         this.monthlyPayment = monthlyPayment;
         this.principalPayment = principalPayment;
@@ -82,7 +82,7 @@ public class ScheduleEntry {
     private Long id;
 
     @Column
-    private Long scheduleId;
+    private Long initiationId;
 
     @Column
     private int paymentNumber;
@@ -98,17 +98,4 @@ public class ScheduleEntry {
 
     @Column
     private double remainingBalance;
-
-    @Override
-    public String toString() {
-        return "ScheduleEntry{" +
-                "id=" + id +
-                ", scheduleId=" + scheduleId +
-                ", paymentNumber=" + paymentNumber +
-                ", monthlyPayment=" + monthlyPayment +
-                ", principalPayment=" + principalPayment +
-                ", interestPayment=" + interestPayment +
-                ", remainingBalance=" + remainingBalance +
-                '}';
-    }
 }

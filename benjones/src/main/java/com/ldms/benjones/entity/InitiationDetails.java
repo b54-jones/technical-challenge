@@ -1,10 +1,13 @@
 package com.ldms.benjones.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.ldms.benjones.utils.View;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "schedule")
-public class Schedule {
+@Table(name = "initiation_details")
+@JsonView(View.Summary.class)
+public class InitiationDetails {
 
     public Long getId() {
         return id;
@@ -54,7 +57,7 @@ public class Schedule {
         this.numberOfRepayments = numberOfRepayments;
     }
 
-    public Schedule(Long id, double amountBorrowed, double yearlyInterest, double deposit, double balloonPayment, int numberOfRepayments) {
+    public InitiationDetails(Long id, double amountBorrowed, double yearlyInterest, double deposit, double balloonPayment, int numberOfRepayments) {
         this.id = id;
         this.amountBorrowed = amountBorrowed;
         this.yearlyInterest = yearlyInterest;
@@ -63,7 +66,7 @@ public class Schedule {
         this.numberOfRepayments = numberOfRepayments;
     }
 
-    public Schedule() {
+    public InitiationDetails() {
     }
 
     @Id

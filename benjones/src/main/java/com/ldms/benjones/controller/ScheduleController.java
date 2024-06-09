@@ -1,12 +1,13 @@
 package com.ldms.benjones.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.ldms.benjones.utils.ScheduleInfo;
+import com.ldms.benjones.entity.ScheduleInfo;
+import com.ldms.benjones.service.ScheduleInfoService;
 import com.ldms.benjones.utils.View;
-import com.ldms.benjones.entity.Schedule;
+import com.ldms.benjones.entity.InitiationDetails;
 import com.ldms.benjones.entity.ScheduleEntry;
 import com.ldms.benjones.service.ScheduleEntryService;
-import com.ldms.benjones.service.ScheduleService;
+import com.ldms.benjones.service.InitiationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,34 +18,32 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class ScheduleController {
 
-    private final ScheduleService scheduleService;
+    private final InitiationService initiationService;
     private final ScheduleEntryService scheduleEntryService;
+    private final ScheduleInfoService scheduleInfoService;
 
     @Autowired
-    public ScheduleController (ScheduleService scheduleService, ScheduleEntryService scheduleEntryService) {
-        this.scheduleService=scheduleService;
+    public ScheduleController (InitiationService initiationService, ScheduleEntryService scheduleEntryService, ScheduleInfoService scheduleInfoService) {
+        this.initiationService = initiationService;
         this.scheduleEntryService = scheduleEntryService;
+        this.scheduleInfoService = scheduleInfoService;
     }
 
     @PostMapping("/schedule")
-    public ResponseEntity<Schedule> saveSchedule(@RequestBody Schedule schedule) {
-        Schedule savedSchedule = scheduleService.saveSchedule(schedule);
-        List<ScheduleEntry> scheduleEntries = scheduleEntryService.generateEntries(schedule);
-        scheduleEntryService.saveScheduleEntries(scheduleEntries);
-        return ResponseEntity.ok(savedSchedule);
+    public ResponseEntity<InitiationDetails> createSchedule(@RequestBody InitiationDetails details) {
+        InitiationDetails savedDetails = initiationService.processAndSaveDetails(details);
+        return ResponseEntity.ok(savedDetails);
     }
 
     @GetMapping("/schedules")
     @JsonView(View.Summary.class)
     public List<ScheduleInfo> getAllSchedules() {
-        List<Schedule> schedules = scheduleService.getAllSchedules();
-        return scheduleEntryService.getScheduleInfoList(schedules);
+        return scheduleInfoService.getScheduleInfoList();
     }
 
     @GetMapping("/schedules/{id}")
     @JsonView(View.Detail.class)
     private ScheduleInfo getScheduleInfo(@PathVariable Long id) {
-        Schedule schedule = scheduleService.findSchedule(id);
-        return scheduleEntryService.getScheduleInfo(schedule);
+        return scheduleInfoService.getScheduleInfo(id);
     }
 }
